@@ -1,0 +1,180 @@
+project:
+  status: active
+  name: digitalhydra/gatsby-starter-krisp
+  buildStatus: ready
+  external: false
+  provider: github
+  deployment:
+    developmentCommand: gatsby develop
+    productionBranch: master
+    publishDirectory: public
+    packager: npm
+    contentDirectory:
+      - content/data
+      - src/images
+    buildCommand: gatsby build
+    builds:
+      master:
+        weight: 1
+        id: _1lergos53
+        environmentVariables: []
+        branch: master
+  type: gatsby
+schemas:
+  - definitions:
+      schema:
+        id: services
+        name: Services
+      fields:
+        - name: Src
+          type: string
+          required: true
+          value: ''
+          id: src
+          orderable: true
+          removable: true
+          system: false
+          widget: MediaSchema
+        - widget: text
+          name: Title
+          type: string
+          required: true
+          value: ''
+          id: title
+          orderable: true
+          removable: true
+          system: false
+    schema:
+      json:
+        required:
+          - title
+          - src
+        type: object
+        properties:
+          src:
+            default: ''
+            type: string
+            title: src
+          title:
+            title: title
+            default: ''
+            type: string
+      name: services
+      ui:
+        title:
+          'ui:widget': text
+        'ui:order':
+          - src
+          - title
+          - '*'
+        src:
+          'ui:widget': MediaSchema
+      fromDataset: true
+    type: dataset
+  - definitions:
+      schema:
+        id: team
+        name: Team
+      fields:
+        - orderable: true
+          removable: true
+          system: false
+          widget: text
+          name: Name
+          type: string
+          required: true
+          value: ''
+          id: name
+        - value: ''
+          id: img
+          orderable: true
+          removable: true
+          system: false
+          widget: MediaSchema
+          name: Img
+          type: string
+          required: true
+    schema:
+      fromDataset: true
+      json:
+        properties:
+          name:
+            title: name
+            default: ''
+            type: string
+          img:
+            title: img
+            default: ''
+            type: string
+        required:
+          - name
+          - img
+        type: object
+      name: team
+      ui:
+        'ui:order':
+          - name
+          - img
+          - '*'
+        img:
+          'ui:widget': MediaSchema
+        name:
+          'ui:widget': text
+    type: dataset
+  - definitions:
+      schema:
+        id: pagedata
+        name: Pagedata
+      fields:
+        - orderable: true
+          removable: true
+          system: false
+          widget: text
+          name: Landingtext
+          type: string
+          required: false
+          value: ''
+          id: landingtext
+        - widget: text
+          name: Welcometext
+          type: string
+          required: false
+          value: ''
+          id: welcometext
+          orderable: true
+          removable: true
+          system: false
+    schema:
+      json:
+        required: []
+        type: object
+        properties:
+          welcometext:
+            default: ''
+            type: string
+            title: Welcometext
+          landingtext:
+            title: Landingtext
+            default: ''
+            type: string
+      name: Pagedata
+      ui:
+        welcometext:
+          'ui:widget': text
+        landingtext:
+          'ui:widget': text
+        'ui:order':
+          - landingtext
+          - welcometext
+          - '*'
+    type: dataset
+mapping:
+  content: []
+  dataset:
+    - schema: services
+      path: content/data/services.yaml
+    - schema: pageData
+      path: content/data/pageData.yaml
+    - schema: team
+      path: content/data/team.yaml
+  form: []
