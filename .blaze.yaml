@@ -1,40 +1,30 @@
 project:
   status: active
-  name: digitalhydra/gatsby-starter-krisp
-  buildStatus: ready
+  name: digitalhydra/how-to-egghead
+  buildStatus: starting
   external: false
   provider: github
   deployment:
-    developmentCommand: gatsby develop
-    productionBranch: master
-    publishDirectory: public
-    packager: npm
-    contentDirectory:
-      - content/data
-      - src/images
-    buildCommand: gatsby build
+    buildCommand: yarn build
     builds:
       master:
         weight: 1
-        id: _1lergos53
+        id: _xsphps13e
         environmentVariables: []
         branch: master
+    developmentCommand: yarn develop
+    productionBranch: master
+    publishDirectory: public
+    packager: yarn
+    contentDirectory:
+      - content
+      - src/images
+      - src/content
   type: gatsby
 schemas:
-  - definitions:
-      schema:
-        id: services
-        name: Services
+  - type: content
+    definitions:
       fields:
-        - name: Src
-          type: string
-          required: true
-          value: ''
-          id: src
-          orderable: true
-          removable: true
-          system: false
-          widget: MediaSchema
         - widget: text
           name: Title
           type: string
@@ -44,137 +34,542 @@ schemas:
           orderable: true
           removable: true
           system: false
+        - orderable: true
+          removable: true
+          system: false
+          widget: SlateEditor
+          name: Content
+          type: string
+          required: true
+          value: ''
+          id: content
+      schema:
+        id: index
+        name: index
     schema:
-      json:
-        required:
-          - title
-          - src
-        type: object
-        properties:
-          src:
-            default: ''
-            type: string
-            title: src
-          title:
-            title: title
-            default: ''
-            type: string
-      name: services
       ui:
+        'ui:order':
+          - title
+          - content
+          - '*'
+        content:
+          'ui:widget': SlateEditor
         title:
           'ui:widget': text
-        'ui:order':
-          - src
+      json:
+        properties:
+          title:
+            default: ''
+            type: string
+            title: Title
+          content:
+            default: ''
+            type: string
+            title: Content
+        required:
           - title
-          - '*'
-        src:
-          'ui:widget': MediaSchema
-      fromDataset: true
-    type: dataset
-  - definitions:
+          - content
+        type: object
+      name: index
+  - type: content
+    definitions:
       schema:
-        id: team
-        name: Team
+        name: Chapter
+        id: chapter
       fields:
+        - name: Title
+          type: string
+          required: true
+          value: ''
+          id: title
+          orderable: true
+          removable: true
+          system: false
+          widget: text
+        - removable: true
+          system: false
+          widget: SlateEditor
+          name: Content
+          type: string
+          required: true
+          value: ''
+          id: content
+          orderable: true
+        - widget: text
+          name: Chaptertitle
+          type: string
+          required: true
+          value: ''
+          id: chapterTitle
+          orderable: true
+          removable: true
+          system: false
+        - removable: true
+          system: false
+          widget: text
+          name: Guide
+          type: string
+          required: true
+          value: ''
+          id: guide
+          orderable: true
         - orderable: true
           removable: true
           system: false
           widget: text
-          name: Name
+          name: Slug
           type: string
           required: true
           value: ''
-          id: name
+          id: slug
+    schema:
+      ui:
+        slug:
+          'ui:widget': text
+        guide:
+          'ui:widget': text
+        'ui:order':
+          - title
+          - content
+          - chapterTitle
+          - guide
+          - slug
+          - '*'
+        content:
+          'ui:widget': SlateEditor
+        chapterTitle:
+          'ui:widget': text
+        title:
+          'ui:widget': text
+      json:
+        required:
+          - title
+          - content
+          - chapterTitle
+          - guide
+          - slug
+        type: object
+        properties:
+          slug:
+            title: Slug
+            default: ''
+            type: string
+          title:
+            title: Title
+            default: ''
+            type: string
+          guide:
+            default: ''
+            type: string
+            title: Guide
+          content:
+            title: Content
+            default: ''
+            type: string
+          chapterTitle:
+            default: ''
+            type: string
+            title: Chaptertitle
+      name: Chapter
+  - definitions:
+      schema:
+        name: Document
+        id: document
+      fields:
         - value: ''
-          id: img
+          id: title
           orderable: true
           removable: true
           system: false
-          widget: MediaSchema
-          name: Img
+          widget: text
+          name: Title
           type: string
           required: true
+        - orderable: true
+          removable: true
+          system: false
+          widget: SlateEditor
+          name: Content
+          type: string
+          required: true
+          value: ''
+          id: content
+        - orderable: true
+          removable: true
+          system: false
+          widget: DatePicker
+          name: Date
+          type: string
+          required: true
+          value: ''
+          id: date
+        - name: Categories
+          type: string
+          required: true
+          value: ''
+          id: categories
+          orderable: true
+          removable: true
+          system: false
+          widget: text
+        - removable: true
+          system: false
+          widget: textarea
+          name: Description
+          type: string
+          required: true
+          value: ''
+          id: description
+          orderable: true
+        - system: false
+          widget: checkbox
+          name: Published
+          type: boolean
+          required: true
+          value: ''
+          id: published
+          orderable: true
+          removable: true
     schema:
-      fromDataset: true
       json:
+        required:
+          - title
+          - content
+          - date
+          - categories
+          - description
+          - published
+        type: object
         properties:
-          name:
-            title: name
+          date:
             default: ''
             type: string
-          img:
-            title: img
+            title: Date
+          categories:
+            default: ''
+            type: string
+            title: Categories
+          title:
+            default: ''
+            type: string
+            title: Title
+          published:
+            title: Published
+            default: ''
+            type: boolean
+          description:
+            default: ''
+            type: string
+            title: Description
+          content:
+            default: ''
+            type: string
+            title: Content
+      name: Document
+      ui:
+        'ui:order':
+          - title
+          - content
+          - date
+          - categories
+          - description
+          - published
+          - '*'
+        content:
+          'ui:widget': SlateEditor
+        date:
+          'ui:widget': DatePicker
+        categories:
+          'ui:widget': text
+        title:
+          'ui:widget': text
+        published:
+          'ui:widget': checkbox
+        description:
+          'ui:widget': textarea
+    type: content
+  - definitions:
+      schema:
+        id: guide
+        name: Guide
+      fields:
+        - system: false
+          widget: text
+          name: Title
+          type: string
+          required: true
+          value: ''
+          id: title
+          orderable: true
+          removable: true
+        - type: string
+          required: true
+          value: ''
+          id: content
+          orderable: true
+          removable: true
+          system: false
+          widget: SlateEditor
+          name: Content
+        - removable: true
+          system: false
+          widget: text
+          name: Guide
+          type: string
+          required: true
+          value: ''
+          id: guide
+          orderable: true
+        - removable: true
+          system: false
+          widget: text
+          name: Slug
+          type: string
+          required: true
+          value: ''
+          id: slug
+          orderable: true
+    schema:
+      json:
+        properties:
+          slug:
+            default: ''
+            type: string
+            title: Slug
+          title:
+            default: ''
+            type: string
+            title: Title
+          guide:
+            default: ''
+            type: string
+            title: Guide
+          content:
+            title: Content
             default: ''
             type: string
         required:
-          - name
-          - img
+          - title
+          - content
+          - guide
+          - slug
         type: object
-      name: team
+      name: Guide
       ui:
-        'ui:order':
-          - name
-          - img
-          - '*'
-        img:
-          'ui:widget': MediaSchema
-        name:
+        slug:
           'ui:widget': text
-    type: dataset
-  - definitions:
-      schema:
-        id: pagedata
-        name: Pagedata
-      fields:
-        - orderable: true
-          removable: true
-          system: false
-          widget: text
-          name: Landingtext
-          type: string
-          required: false
-          value: ''
-          id: landingtext
-        - widget: text
-          name: Welcometext
-          type: string
-          required: false
-          value: ''
-          id: welcometext
-          orderable: true
-          removable: true
-          system: false
-    schema:
-      json:
-        required: []
-        type: object
-        properties:
-          welcometext:
-            default: ''
-            type: string
-            title: Welcometext
-          landingtext:
-            title: Landingtext
-            default: ''
-            type: string
-      name: Pagedata
-      ui:
-        welcometext:
+        title:
           'ui:widget': text
-        landingtext:
+        guide:
           'ui:widget': text
         'ui:order':
-          - landingtext
-          - welcometext
+          - title
+          - content
+          - guide
+          - slug
           - '*'
-    type: dataset
+        content:
+          'ui:widget': SlateEditor
+    type: content
 mapping:
-  content: []
-  dataset:
-    - schema: services
-      path: content/data/services.yaml
-    - schema: pageData
-      path: content/data/pageData.yaml
-    - schema: team
-      path: content/data/team.yaml
+  content:
+    - schema: document
+      path: content/instructor/legal/index.mdx
+    - schema: document
+      path: content/learner/git-semantics.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/04-Html.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/06-Host-a-demo-REST-API.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/06-Receiving-your-equipment.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/07-Getting-paid.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/05-Sharing-your-code.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/02-Setup/01-Quick-Install.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/05-Create-your-code-example.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/07-Json.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/02-Joining-Slack.mdx
+    - schema: guide
+      path: content/instructor/courses/rough-cut-practice-recording/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/11-git-kraken.mdx
+    - schema: document
+      path: content/instructor/style-guide/index.mdx
+    - schema: index
+      path: content/learner/index.mdx
+    - schema: index
+      path: content/reviewer/enhanced-transcripts/index.mdx
+    - schema: chapter
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/01-What-makes-a-great-lesson.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/10-git-concepts.mdx
+    - schema: document
+      path: content/instructor/screencasting/index.mdx
+    - schema: document
+      path: content/instructor/royalties/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/05-Review/04-review-template.mdx
+    - schema: document
+      path: content/instructor/getting-started/index.mdx
+    - schema: document
+      path: content/instructor/screencasting/screen-setup/index.mdx
+    - schema: document
+      path: content/instructor/screencasting/export-screenflow/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/12--npm-concepts.mdx
+    - schema: document
+      path: content/instructor/screencasting/pre-editing/index.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/02-What-should-you-teach.mdx
+    - schema: guide
+      path: src/content/instructorGuide/02-Creating-lessons/06-How-to-instruct.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/08-Chrome-Devtools.mdx
+    - schema: chapter
+      path: >-
+        src/content/instructorGuide/03-Creating-Courses/01-Why-create-a-course.mdx
+    - schema: chapter
+      path: src/content/instructorGuide/05-Odds-and-ends/01-egghead-on-Slack.mdx
+    - schema: chapter
+      path: src/content/reviewerGuide/03-the-organization/00-overview.mdx
+    - schema: document
+      path: content/instructor/getting-started/30-second-demo/index.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/03-Record-your-lesson.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/04-Write-the-title-and-summary.mdx
+    - schema: index
+      path: content/reviewer/reviewing-lessons/index.mdx
+    - schema: document
+      path: content/reviewer/reviewing-courses/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/06-JavaScript.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/03-Meeting-your-coach.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/09-VSCode.mdx
+    - schema: index
+      path: content/coach/index.mdx
+    - schema: chapter
+      path: >-
+        src/content/reviewerGuide/03-Required
+        Learning/00-Required-Learning-Overview.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/04-Edit-your-lesson.mdx
+    - schema: index
+      path: content/illustrator/index.mdx
+    - schema: document
+      path: content/instructor/index.mdx
+    - schema: document
+      path: content/instructor/communication/next-steps/index.mdx
+    - schema: index
+      path: content/developer/index.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/03-What-if-a-lesson-already-exists.mdx
+    - schema: chapter
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/01-Why-be-an-instructor.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/01-File-System.mdx
+    - schema: chapter
+      path: src/content/reviewerGuide/05-Review/01-identify-changes-in-framework.mdx
+    - schema: document
+      path: content/instructor/screencasting/terminal/index.mdx
+    - schema: index
+      path: content/reviewer/communication/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/03-Github.mdx
+    - schema: chapter
+      path: src/content/reviewerGuide/01-Overview/00-review-101.mdx
+    - schema: document
+      path: content/instructor/screencasting/vscode/index.mdx
+    - schema: document
+      path: content/learner/global-gitignore/index.mdx
+    - schema: document
+      path: content/learner/git-terminology.mdx
+    - schema: guide
+      path: >-
+        src/content/reviewerGuide/05-Review/03-How-to-structure-your-course-code.mdx
+    - schema: document
+      path: content/instructor/courses/index.mdx
+    - schema: chapter
+      path: src/content/reviewerGuide/02-Setup/00-Setup-Overview.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-the-organization/02-slack.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/05-Odds-and-ends/02-Our-contributor-agreement.mdx
+    - schema: index
+      path: content/reviewer/example-code/index.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/02-Setup/04-Accounts.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/09-Record-and-upload-your-lesson.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/05-Getting-feedback-on-your-video.mdx
+    - schema: chapter
+      path: src/content/reviewerGuide/05-Review/00-review-process.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-the-organization/01-github.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/01-Getting-started-as-an-egghead-instructor/04-Create-your-30-second-lesson.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/02-Setup/03-VSCode-Plugins.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/05-Css.mdx
+    - schema: guide
+      path: src/content/instructorGuide/00-What-is-egghead.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/06-the-code-part/replace-me.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/02-Setup/02-Chrome-Plugins.mdx
+    - schema: document
+      path: content/instructor/communication/index.mdx
+    - schema: chapter
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/01-Prepare-your-screen-for-recording.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/07-getting-paid/replace-me.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-Required Learning/02-git.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/04-Screencasting-tips/02-Set-up-your-audio.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/05-Review/02-title-lessons.mdx
+    - schema: guide
+      path: src/content/instructorGuide/02-Creating-lessons/07-Speak-concisely.mdx
+    - schema: guide
+      path: src/content/reviewerGuide/03-the-organization/03-email.mdx
+    - schema: document
+      path: content/instructor/screencasting/audio-equipment/index.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/10-When-well-publish-your-lesson.mdx
+    - schema: guide
+      path: >-
+        src/content/instructorGuide/02-Creating-lessons/08-The-show-your-work-trick.mdx
+  dataset: []
   form: []
