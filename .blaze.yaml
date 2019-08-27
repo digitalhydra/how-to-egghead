@@ -1,4 +1,5 @@
 project:
+  type: gatsby
   status: active
   name: digitalhydra/how-to-egghead
   buildStatus: starting
@@ -8,10 +9,10 @@ project:
     buildCommand: yarn build
     builds:
       master:
+        branch: master
         weight: 1
         id: _xsphps13e
         environmentVariables: []
-        branch: master
     developmentCommand: yarn develop
     productionBranch: master
     publishDirectory: public
@@ -20,10 +21,60 @@ project:
       - content
       - src/images
       - src/content
-  type: gatsby
 schemas:
   - type: content
     definitions:
+      fields:
+        - name: Title
+          type: string
+          required: true
+          value: ''
+          id: title
+          orderable: true
+          removable: true
+          system: false
+          widget: text
+        - system: false
+          widget: SlateEditor
+          name: Content
+          type: string
+          required: true
+          value: ''
+          id: content
+          orderable: true
+          removable: true
+      schema:
+        id: index
+        name: index
+    schema:
+      json:
+        required:
+          - title
+          - content
+        type: object
+        properties:
+          content:
+            default: ''
+            type: string
+            title: Content
+          title:
+            default: ''
+            type: string
+            title: Title
+      name: index
+      ui:
+        'ui:order':
+          - title
+          - content
+          - '*'
+        content:
+          'ui:widget': SlateEditor
+        title:
+          'ui:widget': text
+  - definitions:
+      schema:
+        id: chapter
+        name: Chapter
       fields:
         - widget: text
           name: Title
@@ -43,76 +94,24 @@ schemas:
           required: true
           value: ''
           id: content
-      schema:
-        id: index
-        name: index
-    schema:
-      ui:
-        'ui:order':
-          - title
-          - content
-          - '*'
-        content:
-          'ui:widget': SlateEditor
-        title:
-          'ui:widget': text
-      json:
-        properties:
-          title:
-            default: ''
-            type: string
-            title: Title
-          content:
-            default: ''
-            type: string
-            title: Content
-        required:
-          - title
-          - content
-        type: object
-      name: index
-  - type: content
-    definitions:
-      schema:
-        name: Chapter
-        id: chapter
-      fields:
-        - name: Title
-          type: string
-          required: true
-          value: ''
-          id: title
-          orderable: true
-          removable: true
-          system: false
-          widget: text
         - removable: true
           system: false
-          widget: SlateEditor
-          name: Content
-          type: string
-          required: true
-          value: ''
-          id: content
-          orderable: true
-        - widget: text
+          widget: text
           name: Chaptertitle
           type: string
           required: true
           value: ''
           id: chapterTitle
           orderable: true
-          removable: true
-          system: false
-        - removable: true
-          system: false
-          widget: text
-          name: Guide
+        - name: Guide
           type: string
           required: true
           value: ''
           id: guide
           orderable: true
+          removable: true
+          system: false
+          widget: text
         - orderable: true
           removable: true
           system: false
@@ -123,11 +122,37 @@ schemas:
           value: ''
           id: slug
     schema:
+      json:
+        properties:
+          guide:
+            default: ''
+            type: string
+            title: Guide
+          content:
+            default: ''
+            type: string
+            title: Content
+          chapterTitle:
+            default: ''
+            type: string
+            title: Chaptertitle
+          slug:
+            default: ''
+            type: string
+            title: Slug
+          title:
+            default: ''
+            type: string
+            title: Title
+        required:
+          - title
+          - content
+          - chapterTitle
+          - guide
+          - slug
+        type: object
+      name: Chapter
       ui:
-        slug:
-          'ui:widget': text
-        guide:
-          'ui:widget': text
         'ui:order':
           - title
           - content
@@ -141,50 +166,23 @@ schemas:
           'ui:widget': text
         title:
           'ui:widget': text
-      json:
-        required:
-          - title
-          - content
-          - chapterTitle
-          - guide
-          - slug
-        type: object
-        properties:
-          slug:
-            title: Slug
-            default: ''
-            type: string
-          title:
-            title: Title
-            default: ''
-            type: string
-          guide:
-            default: ''
-            type: string
-            title: Guide
-          content:
-            title: Content
-            default: ''
-            type: string
-          chapterTitle:
-            default: ''
-            type: string
-            title: Chaptertitle
-      name: Chapter
-  - definitions:
-      schema:
-        name: Document
-        id: document
+        slug:
+          'ui:widget': text
+        guide:
+          'ui:widget': text
+    type: content
+  - type: content
+    definitions:
       fields:
-        - value: ''
-          id: title
-          orderable: true
+        - orderable: true
           removable: true
           system: false
           widget: text
           name: Title
           type: string
           required: true
+          value: ''
+          id: title
         - orderable: true
           removable: true
           system: false
@@ -194,25 +192,17 @@ schemas:
           required: true
           value: ''
           id: content
-        - orderable: true
-          removable: true
-          system: false
-          widget: DatePicker
+        - widget: DatePicker
           name: Date
           type: string
           required: true
           value: ''
           id: date
-        - name: Categories
-          type: string
-          required: true
-          value: ''
-          id: categories
           orderable: true
           removable: true
           system: false
-          widget: text
-        - removable: true
+        - orderable: true
+          removable: true
           system: false
           widget: textarea
           name: Description
@@ -220,31 +210,26 @@ schemas:
           required: true
           value: ''
           id: description
-          orderable: true
-        - system: false
+        - orderable: true
+          removable: true
+          system: false
           widget: checkbox
           name: Published
           type: boolean
           required: true
           value: ''
           id: published
-          orderable: true
-          removable: true
+        - required: false
+          type: array
+          id: categories
+          widget: collection
+          name: Categories
+      schema:
+        name: Document
+        id: document
     schema:
       json:
-        required:
-          - title
-          - content
-          - date
-          - categories
-          - description
-          - published
-        type: object
         properties:
-          date:
-            default: ''
-            type: string
-            title: Date
           categories:
             default: ''
             type: string
@@ -254,55 +239,67 @@ schemas:
             type: string
             title: Title
           published:
-            title: Published
             default: ''
             type: boolean
+            title: Published
           description:
-            default: ''
-            type: string
             title: Description
-          content:
             default: ''
             type: string
+          content:
             title: Content
+            default: ''
+            type: string
+          date:
+            default: ''
+            type: string
+            title: Date
+        required:
+          - title
+          - content
+          - date
+          - description
+          - published
+        type: object
       name: Document
       ui:
         'ui:order':
           - title
           - content
           - date
-          - categories
           - description
           - published
+          - categories
           - '*'
         content:
           'ui:widget': SlateEditor
         date:
           'ui:widget': DatePicker
         categories:
-          'ui:widget': text
+          'ui:widget': collection
         title:
           'ui:widget': text
         published:
           'ui:widget': checkbox
         description:
           'ui:widget': textarea
-    type: content
-  - definitions:
+  - type: content
+    definitions:
       schema:
-        id: guide
         name: Guide
+        id: guide
       fields:
-        - system: false
+        - orderable: true
+          removable: true
+          system: false
           widget: text
           name: Title
           type: string
           required: true
           value: ''
           id: title
-          orderable: true
-          removable: true
-        - type: string
+        - name: Content
+          type: string
           required: true
           value: ''
           id: content
@@ -310,58 +307,51 @@ schemas:
           removable: true
           system: false
           widget: SlateEditor
-          name: Content
-        - removable: true
-          system: false
-          widget: text
+        - widget: text
           name: Guide
           type: string
           required: true
           value: ''
           id: guide
           orderable: true
-        - removable: true
+          removable: true
           system: false
-          widget: text
-          name: Slug
-          type: string
+        - type: string
           required: true
           value: ''
           id: slug
           orderable: true
+          removable: true
+          system: false
+          widget: text
+          name: Slug
     schema:
       json:
-        properties:
-          slug:
-            default: ''
-            type: string
-            title: Slug
-          title:
-            default: ''
-            type: string
-            title: Title
-          guide:
-            default: ''
-            type: string
-            title: Guide
-          content:
-            title: Content
-            default: ''
-            type: string
         required:
           - title
           - content
           - guide
           - slug
         type: object
+        properties:
+          guide:
+            title: Guide
+            default: ''
+            type: string
+          content:
+            default: ''
+            type: string
+            title: Content
+          slug:
+            title: Slug
+            default: ''
+            type: string
+          title:
+            title: Title
+            default: ''
+            type: string
       name: Guide
       ui:
-        slug:
-          'ui:widget': text
-        title:
-          'ui:widget': text
-        guide:
-          'ui:widget': text
         'ui:order':
           - title
           - content
@@ -370,7 +360,12 @@ schemas:
           - '*'
         content:
           'ui:widget': SlateEditor
-    type: content
+        slug:
+          'ui:widget': text
+        title:
+          'ui:widget': text
+        guide:
+          'ui:widget': text
 mapping:
   content:
     - schema: document
